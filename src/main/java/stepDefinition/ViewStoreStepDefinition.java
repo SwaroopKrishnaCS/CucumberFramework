@@ -21,8 +21,8 @@ public class ViewStoreStepDefinition {
 
 	@When("I invoke stores api with get method")
 	public void i_invoke_stores_api_with_get_method() {
-		response = given().when().get("stores");
-		given().when().log().all().get("stores");
+		response =  given().log().all().when().get("stores");
+		
 	    System.out.println("When Method");
 	}
 
@@ -30,6 +30,19 @@ public class ViewStoreStepDefinition {
 	public void the_response_code_should_be(Integer int1) {
 	   System.out.println("Then Method");
 	   Assert.assertEquals(Long.toString(response.statusCode()), Long.toString(int1));
+	}
+	
+	@When("I invoke {string} api with get method")
+	public void invokeSingleStoreApi(String endpoint) {
+		
+		response = given().log().all().when().get(endpoint,4);
+		
+	}
+	
+	@When("I invoke stores api with get method and {int}")
+	public void i_invoke_stores_api_with_get_method(int limit) {
+		response = (Response) given().log().all().queryParam("$limit",limit).when().get("stores");
+		
 	}
 
 }
