@@ -7,6 +7,7 @@ import model.createIssueRequest.CreateIssueRequest;
 import model.createIssueResponses.CreateIssueMetadataResponse;
 import model.createIssueResponses.Issuetype;
 import utils.JsonReader;
+import utils.TestContext;
 
 import static io.restassured.RestAssured.*;
 
@@ -20,9 +21,14 @@ import com.google.gson.JsonObject;
 
 public class CreateIssueAPIStepDefinition {
 
-	Response response;
-	String projectId;
-	String issueId;
+	private TestContext context;
+	
+	
+	public CreateIssueAPIStepDefinition(TestContext context) {
+		super();
+		this.context = context;
+	}
+
 	Gson gson = new Gson();
 	CreateIssueMetadataResponse createMetadataResponse ;
 	
@@ -30,7 +36,7 @@ public class CreateIssueAPIStepDefinition {
 	public void i_invoke_the_create_issue_metadata_api() {
 	    // Write code here that turns the phrase above into concrete actions
 	  baseURI = "https://katep.atlassian.net";
-	 response =  given().header("Authorization","Basic a2F0ZXBxYUBnbWFpbC5jb206QVRBVFQzeEZmR0YwbGd2bjJTdTdmWG9ZMTNnLU9OMmpjZWVScGZ0bWNfeGhkZFN0QmptLWwwd1pyQ0NMVTlHSXFJQTFPWlB4UmxPUXBXVVN6RUlvMXM3U29Oem5lOWF3YkF5UEZ3endXS0c0QWlORG9xeU1MYU53SnZFY0xkMzdfZzhrbnR2YlNvYy0tYTNSdEdHVllLQzNPQjQ4eDcwU2t3Z2dkQnQta2JqeENiVG56cnBMMlc4PTcxRTcxMEMx").
+	 context.response =  given().header("Authorization","Basic a2F0ZXBxYUBnbWFpbC5jb206QVRBVFQzeEZmR0YwbGd2bjJTdTdmWG9ZMTNnLU9OMmpjZWVScGZ0bWNfeGhkZFN0QmptLWwwd1pyQ0NMVTlHSXFJQTFPWlB4UmxPUXBXVVN6RUlvMXM3U29Oem5lOWF3YkF5UEZ3endXS0c0QWlORG9xeU1MYU53SnZFY0xkMzdfZzhrbnR2YlNvYy0tYTNSdEdHVllLQzNPQjQ4eDcwU2t3Z2dkQnQta2JqeENiVG56cnBMMlc4PTcxRTcxMEMx").
 			 		contentType("application/json").get("/rest/api/3/issue/createmeta");
 	}
 
@@ -39,23 +45,23 @@ public class CreateIssueAPIStepDefinition {
 		
 		
 		//Step 2 - Parse the response and store the values in CreateIssueMetadataResponse pojo class
-		createMetadataResponse = response.as(CreateIssueMetadataResponse.class);
+		createMetadataResponse = context.response.as(CreateIssueMetadataResponse.class);
 		
-		//Step 3 - Extract the values from the pojo class
+		//Step 3 - Extract the values from the pojo class using getter methods
 		
-		projectId = createMetadataResponse.getProjects().get(0).getId();
-		System.out.println("projectId : "+projectId);
+		context.projectId = createMetadataResponse.getProjects().get(0).getId();
+		System.out.println("projectId : "+context.projectId);
 		
 		List<Issuetype> issueTypes = createMetadataResponse.getProjects().get(0).getIssuetypes();
 		
 		for(Issuetype issuetype: issueTypes) {
 			
-			if(issuetype.getName().equals("Story")) {
-				issueId = issuetype.getId();
+			if(issuetype.getName().equals("")) {
+				context.issueTypeId = issuetype.getId();
 			}
 		}
 		
-		System.out.println("issueid : "+issueId);
+		System.out.println("issueid : "+context.issueTypeId);
 		 
 	}
 
@@ -65,16 +71,16 @@ public class CreateIssueAPIStepDefinition {
 		//Read the json file
 		JSONObject jsonObject = JsonReader.readJsonFile("CreateIssue.json");
 		
-		//Convert this Json to a pojo class
+		//Populate this Json into the pojo classes		
 		
 		CreateIssueRequest createIssueRequest = gson.fromJson(jsonObject.toString(), CreateIssueRequest.class);
 		
 		// set in the dynamic values
 		
-		createIssueRequest.getFields().getProject().setId(projectId);
-		createIssueRequest.getFields().getIssuetype().setId(issueId);
+		createIssueRequest.getFields().getProject().setId(context.projectId);
+		createIssueRequest.getFields().getIssuetype().setId(context.issueTypeId);
 		
-		response = given().header("Authorization","Basic a2F0ZXBxYUBnbWFpbC5jb206QVRBVFQzeEZmR0YwbGd2bjJTdTdmWG9ZMTNnLU9OMmpjZWVScGZ0bWNfeGhkZFN0QmptLWwwd1pyQ0NMVTlHSXFJQTFPWlB4UmxPUXBXVVN6RUlvMXM3U29Oem5lOWF3YkF5UEZ3endXS0c0QWlORG9xeU1MYU53SnZFY0xkMzdfZzhrbnR2YlNvYy0tYTNSdEdHVllLQzNPQjQ4eDcwU2t3Z2dkQnQta2JqeENiVG56cnBMMlc4PTcxRTcxMEMx").
+		context.response = given().header("Authorization","Basic a2F0ZXBxYUBnbWFpbC5jb206QVRBVFQzeEZmR0YwbGd2bjJTdTdmWG9ZMTNnLU9OMmpjZWVScGZ0bWNfeGhkZFN0QmptLWwwd1pyQ0NMVTlHSXFJQTFPWlB4UmxPUXBXVVN6RUlvMXM3U29Oem5lOWF3YkF5UEZ3endXS0c0QWlORG9xeU1MYU53SnZFY0xkMzdfZzhrbnR2YlNvYy0tYTNSdEdHVllLQzNPQjQ4eDcwU2t3Z2dkQnQta2JqeENiVG56cnBMMlc4PTcxRTcxMEMx").
 		 		contentType("application/json").body(createIssueRequest).log().all().post("/rest/api/3/issue/");
 		
 		
@@ -84,13 +90,9 @@ public class CreateIssueAPIStepDefinition {
 	@Then("verify the story id is present in response")
 	public void verify_the_story_id_is_present_in_response() {
 	    // Write code here that turns the phrase above into concrete actions
-	    Assert.assertNotNull(response.body().jsonPath().getString("id"));
+	    Assert.assertNotNull(context.response.body().jsonPath().getString("id"));
 	}
 	
-	@Then("the response code should be {int}")
-	public void the_response_code_should_be(Integer int1) {
-	   System.out.println("Then Method");
-	   Assert.assertEquals(Long.toString(response.statusCode()), Long.toString(int1));
-	}
+
 	
 }

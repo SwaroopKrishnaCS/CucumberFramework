@@ -1,5 +1,6 @@
 Feature:Create Issue APIs Tests
 
+@CreateStory
 Scenario: Test Create Issue APIs
 When I invoke the CreateIssueMetadata API
 Then the response code should be 200

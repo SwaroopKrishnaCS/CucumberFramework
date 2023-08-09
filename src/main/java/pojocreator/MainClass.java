@@ -11,6 +11,6 @@ public class MainClass {
 		String outputFileDirectory = "src/main/java/";
 		
 		File file = new File(outputFileDirectory);
-		createPojoFromJson.convertJsonToJavaClass(file,"model.createIssueRequest","CreateIssueRequest",utils.JsonReader.readJsonFile("CreateIssue.json").toString());
+		createPojoFromJson.convertJsonToJavaClass(file,"response.createIssueMetadataResponse","CreateIssueMetadataResponse",utils.JsonReader.readJsonFile("CreateIssueMetadataResponse.json").toString());
 	}
 }

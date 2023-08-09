@@ -11,7 +11,7 @@ Feature: Create Store Scenarios
    |name|address|city|state|zip|
    |<name>|<address>|<city>|<state>|<zip>|
    When I invoke stores api with post method
-	Then the response code for create api should be 201
+	Then the response code should be 201
     
    Examples:
    |name|address|city|state|zip|
@@ -22,4 +22,4 @@ Feature: Create Store Scenarios
      Given store API is available
      And populate the request with json from "CreateStoreRequest.json"
       When I invoke stores api with post method
-			Then the response code for create api should be 201
+			Then the response code should be 201
