@@ -54,5 +54,11 @@ public class ViewStoreStepDefinition {
 		context.response = (Response) given().log().all().queryParam("$limit",limit).when().get("stores");
 		
 	}
+	
+	@When("I invoke stores api with get method for single store")
+	public void invokeGetMethodForSingleStore() {
+	
+		context.response = given().get("stores/{id}",context.storeId);
+	}
 
 }

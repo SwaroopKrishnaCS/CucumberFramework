@@ -9,4 +9,6 @@ public class TestContext {
 	public String issueTypeId;
 	
 	public Response response;
+	
+	public int storeId;
 }

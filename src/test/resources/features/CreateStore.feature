@@ -4,7 +4,7 @@ Feature: Create Store Scenarios
 
  
 
-  @tag2
+  @tag2 
   Scenario Outline: Create Store using input values from examples
    Given store API is available
    And create request for the method using following values
@@ -18,6 +18,7 @@ Feature: Create Store Scenarios
    |BestBuy|Bramlea City Centre|Brampton|ON|LC3 X8R|
     |BestBuy|Square one|Mississauga|ON|LU9 X8R|
     
+    @sanity
     Scenario: Create Store using input from json file
      Given store API is available
      And populate the request with json from "CreateStoreRequest.json"

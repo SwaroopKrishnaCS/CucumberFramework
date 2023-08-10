@@ -67,4 +67,10 @@ public class CreateStoreStepDefinition {
 		requestObject = JsonReader.readJsonFile(fileName)	;
 		
 	}
+	
+	@Then("extract the storeId")
+	public void extractStoreIdFromResponse() {
+		context.storeId = context.response.body().jsonPath().getInt("id");
+		System.out.println("context.storeId : "+context.storeId);
+	}
 }

@@ -11,6 +11,7 @@ import utils.TestContext;
 
 import static io.restassured.RestAssured.*;
 
+
 import java.util.List;
 
 import org.json.JSONObject;
@@ -56,7 +57,7 @@ public class CreateIssueAPIStepDefinition {
 		
 		for(Issuetype issuetype: issueTypes) {
 			
-			if(issuetype.getName().equals("")) {
+			if(issuetype.getName().equals("Story")) {
 				context.issueTypeId = issuetype.getId();
 			}
 		}
