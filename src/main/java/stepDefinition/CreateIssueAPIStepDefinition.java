@@ -2,6 +2,7 @@ package stepDefinition;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import model.createIssueRequest.CreateIssueRequest;
 import model.createIssueResponses.CreateIssueMetadataResponse;
@@ -11,7 +12,7 @@ import utils.TestContext;
 
 import static io.restassured.RestAssured.*;
 
-
+import java.io.File;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -94,6 +95,12 @@ public class CreateIssueAPIStepDefinition {
 	    Assert.assertNotNull(context.response.body().jsonPath().getString("id"));
 	}
 	
+	@Then("validate the response with schema {string}")
+	public void validateSchema(String schemaFileName) {
+		//context.response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File("src/test/resources/schemas/"+schemaFileName)));
+		
+		context.response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File("src/test/resources/schemas/"+schemaFileName)));
+	}
 
 	
 }
